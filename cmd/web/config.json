@@ -1,0 +1,25 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": "8182"
+  },
+  "admin_database": {
+    "host": "127.0.0.1",
+    "port": "5432",
+    "user": "postgres",
+    "password": "2718281828",
+    "dbname": "turkey",
+    "sslmode": "disable"
+  },
+  "db_map": [{
+    "extdb_name": "sakha",
+    "extdb_config": {
+      "host": "127.0.0.1",
+      "port": "5432",
+      "user": "postgres",
+      "password": "2718281828",
+      "dbname": "sakha_x",
+      "sslmode": "disable"
+    }
+  }]
+}
