@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Структура баз данных &#8212; документация AtgsProject 1.1</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Структура веб-сервера go" href="backend.html" />
+    <link rel="prev" title="Общая структура проекта" href="header.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>Структура баз данных<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
+<div class="section" id="id2">
+<h2>Общая информация<a class="headerlink" href="#id2" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Для корректной работы веб-сервера необходима база данных (БД администрирования), в которой хранится необходимая информация о пользователях, их ролях, а также правах доступа определенных пользователей к определнным html-страницам, и их компонентам. Рабочая СУБД - <strong>PostgreSQL</strong>, база данных содержит 2 схемы :</p>
+<ul class="simple">
+<li><p><strong>public</strong></p></li>
+<li><p><strong>admin</strong></p></li>
+</ul>
+<p>Схема <strong>public</strong>–это схема, создаваемая СУБД по умолчанию, в текущем проекте в ней находятся функции стандартного пакета <strong>pgcrypt</strong>.
+Основная же логика сосредоточена в схеме <strong>admin</strong>. Система позволяет подключения также к дополнительным внешним базам данных, но здесь будет рассмотрена основная БД–БД администрирования.</p>
+</div>
+<div class="section" id="admin">
+<h2>Схема <strong>admin</strong>. Система прав доступа<a class="headerlink" href="#admin" title="Ссылка на этот заголовок">¶</a></h2>
+<p>В данной схеме находится основная информация для работы с пользователями, а так же их правами и ролями. Таблица <strong>users</strong> содержит общую информацию о пользователе, информацию об его отделе , его логин и пароль, а также набор дополнительных произвольных параметров, инкапсулированных в <em>json</em>. в таблице <strong>departments</strong> содержится информация о подразделениях(отделах), фактически эта таблица является уточняющей для таблицы <strong>users</strong> и не несет логики проекта, однако создана для нужд предпряитий-потенциальных заказчиков. Таблицы <strong>roles</strong> и <strong>userroles</strong> содержат информацию о ролях пользовтаелей и о связях между пользователями и ролями. Именно <em>роль</em> является основой для построения системы прав доступа.</p>
+<p>Атомарным объектом прав доступа для системы является <em>ресурс</em>. Ресурсами могут быть папки, файлы, html-страницы, а так же их компоненты (например, отдельные пункты меню). Все ресурсы  можно разделить на два класса: <em>системные</em> и  <em>пользовтаельские</em>. Первый из них–объекты используемые собственно приложением и необходимые для его корректной работы. Доступ к таким ресурсам ограничен и возможен только в рамках <em>предустановленных</em> функциональных блоков (например, доступ к странице <a class="reference internal" href="html.html#createuser-label"><span class="std std-ref">сreateuser.html</span></a>: может быть установлен только вместе с соответствующей кнопкой меню администрирования, и соответственно доступом к администрированию в принципе). В то же время, для пользовательских ресурсов такого ограничения нет (т.е. функциональные блоки, содержащие эти ресурсы могут быть редактируемыми внешним администратором). Информацию о  типах ресурсов(html-страницы, пункты меню, файлы…) и их классах (пользовательские, системные) можно найти в таблицу <strong>resourcetypes</strong>. В таблице <strong>resources</strong> находятся ресурсы, структурированные в виде дерева (например, компоненты html-страниц находятся на самой странице а файлы–в папке). Доступ к ресурсам осуществляется также не напрямую, а посредством <em>функциональных блоков</em>. Функциональный блок представляет собой базовый набор ресурсов, отвечающих за единичный процесс. Например, функциональный блок «администрирование пользователей» включает в себя доступ к страницам создания и изменения пользователе и соответствующим компонентам меню. Функциональные блоки находятся в таблице <strong>funcblocks</strong>, в таблицах <strong>funcblockresources</strong> и <strong>funcblockroles</strong> представлена связь между ними и ресурсами и ролями соответственно. Наконец, в таблице <strong>usersessions</strong> хранятся данные пользовательских сессий.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AtgsProject</a></h1>
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<p class="caption"><span class="caption-text">Оглавление:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="header.html">Общая структура проекта</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Структура баз данных</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Общая информация</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#admin">Схема <strong>admin</strong>. Система прав доступа</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backend.html">Структура веб-сервера go</a></li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">Описание html-страниц</a></li>
+<li class="toctree-l1"><a class="reference internal" href="js.html">Описание модулей javascript</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="header.html" title="предыдущая глава">Общая структура проекта</a></li>
+      <li>Next: <a href="backend.html" title="следующая глава">Структура веб-сервера go</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Terekhov Georgy.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/db.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
