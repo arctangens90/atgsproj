@@ -1,0 +1,47 @@
+body {
+    padding-top: 70px;
+}
+.darkcontactform{
+
+    border-radius: 15px;
+
+    padding: 2em;
+
+    background-color: grey;
+
+    border-top:2px solid rgb(73, 31, 47);
+}
+.darkcontactform legend{
+
+    color:#fff;
+}
+
+.darkcontactform label{
+
+    color:#fff;
+}
+
+/*///////////////////////////////////////////////////////////////////////*/
+
+.lightcontactform{
+
+    border-radius: 15px;
+
+    padding: 2em;
+
+    border-top:2px solid rgb(73, 31, 47);
+
+    background-color: grey;
+}
+
+
+.lightcontactform legend{
+
+    color:#fff;
+}
+.list-left li, .list-right li {
+    cursor: pointer;
+}
+
+
+

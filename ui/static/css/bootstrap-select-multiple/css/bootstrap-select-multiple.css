@@ -1,0 +1,28 @@
+/*
+ - del z-index in Bootstrap.min.css;
+
+ - change style.css dropdown background-color;
+
+*/
+
+.bootstrap-select .dropdown-toggle .filter-option{
+
+  background: white;
+
+  border: 1px solid #cccccc;
+}
+
+.bootstrap-select > .dropdown-toggle {
+
+    position: static;
+}
+
+.dropdown-item:hover{
+
+  color: #ffffff;
+}
+
+.dropdown-menu
+
+  min-width: 100% !important;
+}
