@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+
+<body >
+{{template "modalinfo"}}
+<link rel="stylesheet" href="static/css/table.css">
+<!----
+<link rel="stylesheet" href="/static/css/datepicker.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-datepicker.min.css"/>
+----->
+{{template "PreLoader"}}
+<div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        {{template "toppanel" .SessionData}}
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+                {{template "leftpanel" .SessionData}}
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+                        <!-- Main-body start -->
+                        <div class="main-body">
+                            <div class="page-wrapper">
+                                <!-- Page-header start -->
+                                {{template "pageheader" .}}
+
+                                <div class="page-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                            <div class="card">
+                                                <div class="card-block">
+
+                                                    <h4 class="sub-title">Базовая таблица-дерево с авто-расчетом</h4>
+                                                    <div id="tabcontainer">
+
+                                                    </div>
+                                                    <h4 class="sub-title">Здесь дерево только по первому столбцу </h4>
+                                                    <div id="tabcontainer1">
+
+                                                    </div>
+                                                    <h4 class="sub-title">Здесь разные дети входят в родителя с разными знаками (+,-,0)</h4>
+                                                    <h4 class="sub-title">Формулы таковы: root1=child1-child2 child2=grandchild1 root2=child4</h4>
+                                                    <h4 class="sub-title">Здесь и в след. пункте предполагается, что дерево может быть загружено нерасчитанным</h4>
+                                                    <div class="row">
+                                                        <label class="col-sm-2"></label>
+                                                        <div class="col-sm-10">
+                                                            <button type="button" class="btn btn-primary m-b-0" onclick="tab2Refresh()">Reclac tree </button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tabcontainer2">
+
+                                                    </div>
+                                                    <h4 class="sub-title">Здесь элементы могут иметь источник в другой части дерева</h4>
+                                                    <h4 class="sub-title">У child 3 источник grandchild1</h4>
+                                                    <div class="row">
+                                                        <label class="col-sm-2"></label>
+                                                        <div class="col-sm-10">
+                                                            <button type="button" class="btn btn-primary m-b-0" onclick="tab3Refresh()">Reclac tree 4</button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tabcontainer3">
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="styleSelector">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+
+
+
+
+
+{{template "bsscripts"}}
+{{template "basicscripts"}}
+
+<script src="static/js/custom/components/table.js"></script>
+<script src="static/js/module/tablecreator.js"></script>
+
+<script src="static/js/custom/html/yakuttesttree.js"></script>
+<script>tst()</script>
+
+</html>

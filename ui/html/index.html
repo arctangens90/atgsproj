@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{template "head"}}
+
+<body>
+{{template "PreLoader"}}
+<div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        {{template "toppanel" .}}
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+            {{template "leftpanel" .}}
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+                        <div class="main-body">
+                            <div class="page-wrapper">
+
+                                <div class="page-body">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="styleSelector">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "modalinfo"}}
+{{template "basicscripts"}}
+{{template "bsscripts"}}
+
+<script>
+    var $window = $(window);
+    var nav = $('.fixed-button');
+    $window.scroll(function(){
+        if ($window.scrollTop() >= 200) {
+            nav.addClass('active');
+        }
+        else {
+            nav.removeClass('active');
+        }
+    });
+</script>
+</body>
+
+</html>

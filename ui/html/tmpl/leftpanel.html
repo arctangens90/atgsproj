@@ -1,0 +1,186 @@
+{{define "leftpanel"}}
+    {{template "changepassword" .UserData.User.UserIndex}}
+        <!--- Главное фиксированное меню. В нем же модальная форма смены пароля --->
+
+    {{$isSigned:=ne .UserData.User.Login ""}}
+                    <nav class="pcoded-navbar">
+                        <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
+                        <div class="pcoded-inner-navbar main-menu">
+                            <div class="">
+                                {{if $isSigned}}
+                                <div class="main-menu-header">
+                                    <div class="user-details">
+                                        <span>Signed as {{.UserData.User.Login}}</span>
+                                        <span id="more-details">{{.UserData.Role.RoleName}}<i class="ti-angle-down"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="main-menu-content">
+                                    <ul>
+                                        <li class="more-details">
+                                            <a href="/settings"><i class="ti-settings"></i>Settings</a>
+                                            <a href="/edit"><i class="ti-user"></i>Profile</a>
+                                            <a href="/logout"><i class="ti-layout-sidebar-left"></i>Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                    {{end}}
+                            </div>
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Information</div>
+                            <ul class="pcoded-item pcoded-left-item">
+                                <li class="active">
+                                    <a href="/index">
+                                        <span class="pcoded-micon"><i class="ti-home"></i><b>AA</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">About ATGS</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class="pcoded-hasmenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-package"></i></span>
+                                        <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Our Products</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" ">
+                                            <a href="/">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">STN-3000</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">STN-3000-Р</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">SPURT</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.breadcrumbs">SPURT-Р</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">Complex System</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            {{if .HasPermission "Adminref"}}
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.forms">Administration</div>
+                                <ul class="pcoded-item pcoded-left-item">
+                                    {{if .HasPermission "createusers"}}
+                                        <li>
+                                            <a href="/createuser">
+                                                <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.form-components.main">Create user</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    {{end}}
+                                    {{if .HasPermission "Edituserspage"}}
+                                        <li>
+                                            <a href="/edit?IsAdmin=true">
+                                                <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.form-components.main">Edit user</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    {{end}}
+                                </ul>
+                            {{end}}
+
+
+
+                            {{if .HasPermission "Nominationsref"}}
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.forms">Nomination GAS</div>
+                            <ul class="pcoded-item pcoded-left-item">
+                                <li class="pcoded-hasmenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="ti-package"></i></span>
+                                        <span class="pcoded-mtext"  data-i18n="nav.basic-components.main">Our tables</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" ">
+                                            <a href="/yakuttest">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">TEST RRS</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/yakuttestro">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">TEST RHO</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/yakuttestcross">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">TEST CROSSRRS</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/yakuttesttree">
+                                                <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.basic-components.alert">TEST TREE</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+                                <li>
+                                    <a href="form-elements-component.html">
+                                        <span class="pcoded-micon"><i class="ti-layers"></i><b>NO</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Nominations Overview</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+
+                                <li>
+                                    <a href="bs-basic-table.html">
+                                        <span class="pcoded-micon"><i class="ti-layers"></i><b>RN</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Register Nomination</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                                {{end}}
+                            {{if .HasPermission "Masterdataref"}}
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.forms">Master Data</div>
+                            <ul class="pcoded-item pcoded-left-item">
+                                <li>
+                                    <a href="chart.html">
+                                        <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.form-components.main">Chart</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                            {{end}}
+                        </div>
+                    </nav>
+
+
+
+{{end}}

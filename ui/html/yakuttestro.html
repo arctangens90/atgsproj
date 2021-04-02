@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+
+<body >
+{{template "modalinfo"}}
+<link rel="stylesheet" href="static/css/table.css">
+<!----
+<link rel="stylesheet" href="/static/css/datepicker.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-datepicker.min.css"/>
+----->
+{{template "PreLoader"}}
+<div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        {{template "toppanel" .SessionData}}
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+                {{template "leftpanel" .SessionData}}
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+                        <!-- Main-body start -->
+                        <div class="main-body">
+                            <div class="page-wrapper">
+                                <!-- Page-header start -->
+                                {{template "pageheader" .}}
+
+                                <div class="page-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!-- Input Create User start -->
+                                            <div class="card">
+                                                <div class="card-block">
+                                                    <h4 class="sub-title">Паспорт качества газа</h4>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 col-form-label">Select date</label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon" id="calendar_ct"><i class="icofont icofont-flash"></i></span>
+                                                                <input type="datetime-local" class="form-control" name="dataselect"
+                                                                       onchange ="val_time=this.value">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2"></label>
+                                                        <div class="col-sm-10">
+                                                            <button type="button" class="btn btn-primary m-b-0" onclick="renderTable()">OK</button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="containertab">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="styleSelector">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+
+
+
+
+
+{{template "bsscripts"}}
+{{template "basicscripts"}}
+
+<script src="static/js/custom/components/table.js"></script>
+
+<script src="static/js/module/tablecreator.js"></script>
+<script src="static/js/custom/html/yakuttest_ro.js"></script>
+
+
+</html>

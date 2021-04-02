@@ -1,0 +1,74 @@
+{{define "mainmenu"}}
+    {{template "changepassword" .UserData.User.UserIndex}}
+        <!--- Главное фиксированное меню. В нем же модальная форма смены пароля --->
+
+<div class="navbar-wrapper">
+    <div class="container-fluid">
+        <nav class="navbar navbar-fixed-top">
+            <div class="container">
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        {{/* Авторизированных пользователей кидаем на главную страницу, иначе--на форму регистрации*/}}
+                        <li class="active"><a {{if ne .UserData.User.Login ""}}
+                                              href="/index"
+                                              {{else}} href="/"
+                                              {{end}} class="">HOME</a></li>
+                        {{/*Ищем разрешение на пункт меню, если есть--генерируем его*/}}
+                        {{if .HasPermission "Adminref"}}
+                            <li class=" dropdown">
+                                <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ADMINISTRATION <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    {{if .HasPermission "Edituserspage"}}
+                                    <li ><a href="/edit?IsAdmin=true">Edit User</a></li>
+                                    {{end}}
+                                    {{if .HasPermission "createusers"}}
+                                        <li ><a href="/createuser" >Create User</a></li>
+                                    {{end}}
+                                    {{if .HasPermission "roleeditor"}}
+                                        <li><a href="#" >Role Editor</a></li>
+                                    {{end}}
+                                    {{if .HasPermission "blockeditor"}}
+                                        <li><a href="#" >Block Editor</a></li>
+                                    {{end}}
+                                </ul>
+                            </li>
+                        {{end}}
+                        {{if .HasPermission "Nominationsref"}}
+                        <li class=" dropdown">
+                            <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">TEST TABLES <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class=" dropdown">
+                                    <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Nominations Overview</a>
+                                </li>
+                                <li><a href="/yakuttest">TEST RRS</a></li>
+                                <li><a href="/yakuttestro">TEST RHO</a></li>
+                                <li><a href="/yakuttestcross">TEST CROSS</a></li>
+                                <li><a href="/yakuttesttree">TEST TREE</a></li>
+                            </ul>
+                        </li>
+                        {{end}}
+                        <li><a href="#" class="">CONTACTS</a></li>
+                        <li class=" select"><a href="#" class="">CONTACT INFORMATION</a></li>
+                        {{if .HasPermission "Masterdataref"}}
+                        <li class=" select"><a href="#" class="">MASTER DATA</a></li>
+                        {{end}}
+                    </ul>
+                    {{/*Если мы вошли, появляется правая панель с кнопокй редактирования профиля и выхода*/}}
+                    {{if ne .UserData.User.Login ""}}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Signed in as {{.UserData.User.Login}} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#changepass" data-toggle="modal">Change Password</a></li>
+                                <li><a href="/edit">Profile</a></li>
+                            </ul>
+                        </li>
+                        <li ><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    </ul>
+                   {{end}}
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+{{end}}
