@@ -296,13 +296,15 @@ class CalculatedTableCell extends DataTableColumn {
     }
 }
 
+
 class CalculatedCellFromColumns extends CalculatedTableCell{
     constructor({header, cellStyle=()=>{}, funcObj, decoder=DefaultDecoder}){
         super({header, cellStyle, calcFunc: obj =>{
-                return funcObj.f(...funcObj.noteObj.map(x=>findSourceByNote(obj, this.decoder, x.noteValue)))
+                return funcObj.f(...funcObj.noteObj.map(x=>(findSourceByNote(obj, this.decoder, x.noteValue))[x.noteField]))
             }, decoder})
     }
 }
+
 
 class CalculatedCellFromColumnsValues extends CalculatedCellFromColumns{
     constructor({header, cellStyle=()=>{}, calcFunc, noteArr, decoder=DefaultDecoder}){
@@ -315,10 +317,12 @@ class CalculatedCellFromColumnsValues extends CalculatedCellFromColumns{
 }
 
 
+
+
 class SumCellFromColumns extends CalculatedCellFromColumnsValues {
     constructor({header, cellStyle=()=>{}, noteArr, decoder=DefaultDecoder}){
         super({header, cellStyle, calcFunc: (...objArr)=>{
-                return objArr.reduce((sum,x)=>sum+x[this.decoder.columnData.columnValue]??0,0);
+                return objArr.reduce((sum,x)=>sum+x??0,0);
             } , noteArr, decoder})
     }
 }
@@ -327,13 +331,10 @@ class SumCellFromColumns extends CalculatedCellFromColumnsValues {
 class MinCellFromColumns extends CalculatedCellFromColumnsValues {
     constructor({header, cellStyle=()=>{}, noteArr, decoder=DefaultDecoder}){
         super({header, cellStyle, calcFunc: (...objArr)=>{
-                return objArr.reduce((min,x)=>min > (x[this.decoder.columnData.columnValue]??Infinity)?
-                    x[this.decoder.columnData.columnValue]:min, Infinity);
+                return objArr.reduce((min,x)=>min > (x??Infinity)? x:min, Infinity);
             } , noteArr, decoder})
     }
 }
-
-
 
 
 //ВСПОМОГАТЕЛЬНЫЕ КОМПОНЕНТЫ ДЛЯ ЯЧЕЕК
@@ -831,7 +832,13 @@ class SourcedTreeTableCreator extends TreeTableCreator{
                 } else {
                     arr.filter(x => x[parentIndex] === r[childIndex]).forEach((y, j, filtArr) =>
                         associateParent(y, r, t => calcTreeFunc(
-                            filtArr.map(a => a[columnDataName].find(x => x[columnNote] === t))))
+                            filtArr.map(a => {
+                                return {
+                                    flagsum : a[calcIndex] ?? 1,
+                                    hist: a[columnDataName].find(x => x[columnNote] === t)
+                                }
+
+                            })))
                     )
                 }
             })
@@ -840,14 +847,59 @@ class SourcedTreeTableCreator extends TreeTableCreator{
         this.createAssociationMap = function () {
             this.createBasicAssociationMap();
             this.createSourcedTreeAssociationMap(arr => {
-                let r = arr.reduce((sum, i) => sum = sum + i[columnValue], 0);
-                alert(r);
-                return r
+                return arr.reduce((sum, i) => sum = sum + i.flagsum*(i.hist)[columnValue], 0);
             })
         }
 
     }
 }
+
+
+class shablonTree extends SourcedTreeTableCreator {
+    constructor({
+                    TableMeta,
+                    TableData,
+                    Columns,
+                    SaveFunc,
+                    TableStyle = DefaultTableStyles,
+                    DataCoder = {
+                        Decoder: treeDecoder,
+                        Encoder: DefaultEncoder
+                    },
+                    GroupRows = {
+                        initRow: () => {
+                        },
+                        contentRow: () => {
+                        },
+                        footRow: () => {
+                        }
+                    }
+                }) {
+        super({
+                TableMeta, TableData, Columns, SaveFunc, TableStyle, DataCoder, GroupRows
+            }
+        );
+        let{columnData:{columnDataName, columnNote, columnValue, columnIndexes, columnRefreshable, columnPrevValue},
+            rowData:{rowIndexes}, treeData:{childIndex, parentIndex, sourceIndex, calcIndex, showIndex} } = this.DataCoder.Decoder
+
+
+        this.createTableBodyRows = function (tbody) {
+            this.GroupRows.initRow(tbody);
+            //this.TableData.filter(x=>x[showIndex]??1===1).forEach((rowObj, j, arr) => {
+            this.TableData.forEach((rowObj, j, arr) => {
+                this.GroupRows.contentRow(tbody, rowObj, j, arr);
+                let row = document.createElement('tr')
+                this.Columns.forEach(h => {
+                    let cell = h.createCell(rowObj, arr);
+                    row.appendChild(cell);
+                });
+                tbody.appendChild(row);
+            })
+            this.GroupRows.footRow(tbody);
+        }
+    }
+}
+
 
 
 
