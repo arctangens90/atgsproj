@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+{{template "head"}}
+
+<body >
+{{template "modalinfo"}}
+<link rel="stylesheet" href="static/css/table.css">
+<!----
+<link rel="stylesheet" href="/static/css/datepicker.css">
+<link rel="stylesheet" href="/static/bootstrap/css/bootstrap-datepicker.min.css"/>
+----->
+{{template "PreLoader"}}
+<div id="pcoded" class="pcoded">
+    <div class="pcoded-overlay-box"></div>
+    <div class="pcoded-container navbar-wrapper">
+        {{template "toppanel" .SessionData}}
+        <div class="pcoded-main-container">
+            <div class="pcoded-wrapper">
+                {{template "leftpanel" .SessionData}}
+                <div class="pcoded-content">
+                    <div class="pcoded-inner-content">
+                        <!-- Main-body start -->
+                        <div class="main-body">
+                            <div class="page-wrapper">
+                                <!-- Page-header start -->
+                                {{template "pageheader" .}}
+
+                                <div class="page-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                            <div class="card">
+                                                <div class="card-block">
+                                                    <h4 class="sub-title">Тест шаблона</h4>
+                                                    <div class="row">
+                                                        <label class="col-sm-2"></label>
+                                                        <div class="col-sm-10">
+                                                            <button type="button" class="btn btn-primary m-b-0" onclick="renderTable()">OK</button>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tabcontainer">
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="styleSelector">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+
+
+
+
+
+{{template "bsscripts"}}
+{{template "basicscripts"}}
+
+<script src="static/js/custom/components/table.js"></script>
+<script src="static/js/module/tablecreator.js"></script>
+
+<script src="static/js/custom/html/yakuttestshab.js"></script>
+
+
+</html>

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {{template "head"}}
-<link rel="stylesheet" type="text/css" href="static/css/bootstrap-duallistbox/css/bootstrap-duallistbox.css">
-<link rel="stylesheet" type="text/css" href="static/css/bootstrap-duallistbox/css/duallistbox.css">
+<link rel="stylesheet" type="text/css" href="static/css/jqListBox.css">
 
 <body >
 {{template "PreLoader"}}
@@ -23,41 +22,8 @@
                             <div class="page-wrapper">
                                 <!-- Page-header start -->
                                 <div class="page-header card">
-                                    <div class="row align-items-end">
-                                        <div class="col-lg-8">
-                                            <div class="page-header-title">
-                                                <i class="icofont icofont-edit bg-c-pink"></i>
-                                                <div class="d-inline">
-                                                    {{if $flag}}
-                                                    <h4>Edit User</h4>
-                                                    <span>Include edit user and set role</span>
-                                                    {{else}}
-                                                        <h4>Personal account</h4>
-                                                        <span>Edit your's account</span>
-                                                    {{end}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="page-header-breadcrumb">
-                                                <ul class="breadcrumb-title">
-                                                    <li class="breadcrumb-item">
-                                                        <a href="/index">
-                                                            <i class="icofont icofont-home"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="breadcrumb-item">
-                                                        {{if $flag}}
-                                                        <a href="/edit?IsAdmin=true">Edit Users</a>
-                                                        {{else}}
-                                                            <a href="/edit">Profile</a>
-                                                        {{end}}
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    {{template "pageheader" .}}
+
                                 <!-- Page-header end -->
                                 <!-- Page body start -->
                                 <div class="page-body">
@@ -73,71 +39,71 @@
                                                     {{end}}
                                                     <form>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">Login</label>
+                                                            <label class="col-sm-2 col-form-label">Логин</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="login_user_et"><i class="icofont icofont-flash"></i></span>
                                                                     {{if $flag}}
-                                                                    <select  class="form-control" title="Select Login User" data-toggle="tooltip"
+                                                                    <select  class="form-control" title="Выберите пользователя" data-toggle="tooltip"
                                                                             id ="userlist" name="Login" onchange="GeneratePage(this.selectedIndex)">
                                                                         <option selected disabled hidden>Login</option>
                                                                     </select>
                                                                     {{else}}
-                                                                        <input type="text" id="login_user_et" class="form-control" placeholder="Enter Your Login" title="Your Login" data-toggle="tooltip"
+                                                                        <input type="text" id="login_user_et" class="form-control" placeholder="Enter Your Login" title="Логин" data-toggle="tooltip"
                                                                                name="Login" id="userlist" value ={{.SessionData.UserData.User.Login}} readonly="true">
                                                                     {{end}}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">Department</label>
+                                                            <label class="col-sm-2 col-form-label">Отдел</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="department_user_et"><i class="icofont icofont-filter"></i></span>
                                                                     <select class="form-control" title="Select Department User" data-toggle="tooltip" style="color:#a9a9a9" id ="deplist" name="Department">
-                                                                        <option disabled selected hidden  >Select User's Department</option>>
+                                                                        <option disabled selected hidden  >Выберите отдел</option>>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">First Name</label>
+                                                            <label class="col-sm-2 col-form-label">Имя</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="first_name_user_et"><i class="icofont icofont-user-alt-3"></i></span>
-                                                                    <input type="text" id="uname" class="form-control" placeholder="Enter First Name" title="Enter Your First Name" data-toggle="tooltip">
+                                                                    <input type="text" id="uname" class="form-control" placeholder="Введите имя" title="Введите имя" data-toggle="tooltip">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">Middle Name</label>
+                                                            <label class="col-sm-2 col-form-label">Отчество</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="middle_name_user_et"><i class="icofont icofont-user-alt-3"></i></span>
-                                                                    <input type="text" id="umiddlename" class="form-control" placeholder="Enter Middle Name" title="Enter Your Middle Name" data-toggle="tooltip">
+                                                                    <input type="text" id="umiddlename" class="form-control" placeholder="Введите отчество" title="Введите имя" data-toggle="tooltip">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">Last Name</label>
+                                                            <label class="col-sm-2 col-form-label">Фамилия</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="last_name_user_et"><i class="icofont icofont-user-alt-3"></i></span>
-                                                                    <input type="text"  id="usurname" class="form-control" placeholder="Enter Last Name" title="Enter Your Last Name" data-toggle="tooltip">
+                                                                    <input type="text"  id="usurname" class="form-control" placeholder="Введите фамилию" title="Введите фамилию" data-toggle="tooltip">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">E-mail Address</label>
+                                                            <label class="col-sm-2 col-form-label">E-mail</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="email_user_et"><i class="icofont icofont-ui-email"></i></span>
-                                                                    <input type="text"  id="uemail" class="form-control" placeholder="Enter E-mail Address" title="Enter Your E-mail Address" data-toggle="tooltip">
+                                                                    <input type="text"  id="uemail" class="form-control" placeholder="Введите e-mail" title="Введите e-mail" data-toggle="tooltip">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-sm-2 col-form-label">Phone</label>
+                                                            <label class="col-sm-2 col-form-label">Телефон</label>
                                                             <div class="col-sm-10">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon" id="phone_user_et"><i class="icofont icofont-phone"></i></span>
@@ -148,12 +114,69 @@
                                                         <div class="row">
                                                             <label class="col-sm-2"></label>
                                                             <div class="col-sm-10">
-                                                                <button type="button" class="btn btn-primary m-b-0" onclick="UpdateUserProperties()">Submit</button>
+                                                                <button type="button" class="btn btn-primary m-b-0" onclick="UpdateUserProperties()">Сохранить</button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
+
+                                            {{if $flag}}
+                                                <div class="card">
+                                                    <div class="card-block">
+                                                        <h4 class="sub-title">Редактор ролей</h4>
+                                                            <div class="row">
+                                                                <div class="col-sm-5" style="text-align: center;">
+                                                                    <span>Доступные роли</span>
+                                                                </div>
+                                                                <div class="col-sm-2">
+                                                                </div>
+                                                                <div class="col-sm-5" style="text-align: center;">
+                                                                    <span>Выбранные роли</span>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-sm-5">
+                                                                    <div class="col-sm-12 customlist">
+                                                                        <ul id="select_roles">
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-2" style="text-align: center;">
+                                                                    <br>
+                                                                    <br>
+                                                                    <button type="button" class="btn btn-warning" id="select_roles-move"
+                                                                            onclick="MoveRoles(AvailableRoleList,AcceptedRoleList)">======></button>
+                                                                    <br>
+                                                                    <br>
+                                                                    <button type="button" class="btn btn-warning" id="set_roles-move"
+                                                                            onclick="MoveRoles(AcceptedRoleList,AvailableRoleList)"><======</button>
+                                                                </div>
+                                                                <div class="col-sm-5">
+                                                                    <div class="col-sm-12 customlist">
+                                                                        <ul id="set_roles">
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <button type="submit" class="btn btn-primary btn-block" onclick="UpdateUserRoles()">
+                                                                        Сохранить</button>
+                                                                </div>
+                                                            </div>
+
+                                                    </div>
+                                                </div>
+
+                                            {{end}}
+
+
                                             <!-- Input Edit User end -->
                                             <!-----
                                             {{/*{if $flag*/}}
@@ -193,7 +216,7 @@
         </div>
     </div>
 </div>
-
+</div>
 
 
 {{template "modalinfo"}}
@@ -202,6 +225,10 @@
 {{template "bsscripts"}}
 {{template "basicscripts"}}
 
+
+<!---<script src="static/js/custom/components/jqListbox.plugin-1.3.js"></script>
+<script src="static/js/custom/components/jqListbox.dual.js"></script>
+---->
 <script src="static/js/custom/html/edituser.js"></script>
 <!--Здесь логика несколько рзличается: в личном кабинете можем загрузить данные юзера из сесии,
 а вот для администирования нужно подгружать данные для каждого юзера отдельно

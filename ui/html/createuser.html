@@ -28,10 +28,10 @@
                                         <!-- Input Create User start -->
                                         <div class="card">
                                             <div class="card-block">
-                                                <h4 class="sub-title">Create User</h4>
+                                                <h4 class="sub-title">Создать пользователя</h4>
                                                 <form>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Role</label>
+                                                        <label class="col-sm-2 col-form-label">Выберите роли</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="role_user_ct"><i class="icofont icofont-users"></i></span>
@@ -45,29 +45,29 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Login</label>
+                                                        <label class="col-sm-2 col-form-label">Логин</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="login_user_ct"><i class="icofont icofont-flash"></i></span>
-                                                                <input id="login" type="text" class="form-control" placeholder="Enter Your Login" title="Enter Your login" data-toggle="tooltip" onchange="CheckLogin(this)">
+                                                                <input id="login" type="text" class="form-control" placeholder="Введите логин" title="Введите логин" data-toggle="tooltip" onchange="CheckLogin(this)">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Password</label>
+                                                        <label class="col-sm-2 col-form-label">Пароль</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="password_user_ct"><i class="icofont icofont-ui-password"></i></span>
-                                                                <input id="password" type="text" class="form-control" placeholder="Enter Your Password" title="Enter Your Password" data-toggle="tooltip">
+                                                                <input id="password" type="text" class="form-control" placeholder="Введите пароль" title="Введите пароль" data-toggle="tooltip">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Department</label>
+                                                        <label class="col-sm-2 col-form-label">Отдел</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="department_user_ct"><i class="icofont icofont-filter"></i></span>
-                                                                <select id ="deplist"  name="select" class="form-control" title="Select Department User" data-toggle="tooltip">
+                                                                <select id ="deplist"  name="select" class="form-control" title="Выберите отдел" data-toggle="tooltip">
                                                                     {{range $x,$y:=.CommonObjects.DepTree}} <option  value={{$y.DepIndex}}>{{$y.DepName}}</option>
                                                                     {{end}}
                                                                 </select>
@@ -75,43 +75,43 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">First Name</label>
+                                                        <label class="col-sm-2 col-form-label">Имя</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="first_name_user_ct"><i class="icofont icofont-user-alt-3"></i></span>
-                                                                <input type="text" id="uname" class="form-control" placeholder="Enter Your First Name" title="Enter Your First Name" data-toggle="tooltip">
+                                                                <input type="text" id="uname" class="form-control" placeholder="Введите имя" title="Введите имя" data-toggle="tooltip">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Middle Name</label>
+                                                        <label class="col-sm-2 col-form-label">Фамилия</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="middle_name_user_ct"><i class="icofont icofont-user-alt-3"></i></span>
-                                                                <input type="text" id="usurname" class="form-control" placeholder="Enter Your Middle Name" title="Enter Your Middle Name" data-toggle="tooltip">
+                                                                <input type="text" id="usurname" class="form-control" placeholder="Введите фамилию" title="Введите фамилию" data-toggle="tooltip">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Last Name</label>
+                                                        <label class="col-sm-2 col-form-label">Отчество</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="last_name_user_ct"><i class="icofont icofont-user-alt-3"></i></span>
-                                                                <input type="text" id="umiddlename" class="form-control" placeholder="Enter Your Last Name" title="Enter Your Last Name" data-toggle="tooltip">
+                                                                <input type="text" id="umiddlename" class="form-control" placeholder="Введите отчество" title="Введите отчество" data-toggle="tooltip">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">E-mail Address</label>
+                                                        <label class="col-sm-2 col-form-label">E-mail</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="email_user_ct"><i class="icofont icofont-ui-email"></i></span>
-                                                                <input type="text" id="email" class="form-control" placeholder="Enter Your E-mail Address" title="Enter Your E-mail Address" data-toggle="tooltip">
+                                                                <input type="text" id="email" class="form-control" placeholder="Введите E-mail" title="Введите E-mail" data-toggle="tooltip">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 col-form-label">Phone</label>
+                                                        <label class="col-sm-2 col-form-label">Телефон</label>
                                                         <div class="col-sm-10">
                                                             <div class="input-group">
                                                                 <span class="input-group-addon" id="phone_user_ct"><i class="icofont icofont-phone"></i></span>
@@ -122,7 +122,7 @@
                                                     <div class="row">
                                                         <label class="col-sm-2"></label>
                                                         <div class="col-sm-10">
-                                                            <button type="button" class="btn btn-primary m-b-0" onclick="CreateUser()">Submit</button>
+                                                            <button type="button" class="btn btn-primary m-b-0" onclick="CreateUser()">Создать</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -157,7 +157,7 @@
     //Inizialize Bootstrap Select Box - time decision!!!- fix by Gladuk
     $('.selectpicker').selectpicker(
         {
-            noneSelectedText:"Selected Roles",
+            noneSelectedText:"Выберите роль",
             dropupAuto: false
         }
     );
