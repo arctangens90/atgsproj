@@ -33,6 +33,14 @@ type HtmlHandler struct {
 	Db             *sql.DB                                      //подключение к бд
 }
 
+
+func (h *HtmlHandler) ConfigDefaultHandler(SourceHtml string, PathHtml string, PageMeta PageMeta, CommonObjects interface{}){
+	h.SourceHtml = SourceHtml
+	h.PathSourceHtml = append([]string{PathHtml}, h.PathSourceHtml...)
+	h.HtmlData.PageMeta = PageMeta
+	h.HtmlData.CommonObjects = CommonObjects
+}
+
 func (h HtmlHandler) HtmlHandle(w http.ResponseWriter, r *http.Request) {
 	var IsAccepted bool
 	//смотрим на доступ

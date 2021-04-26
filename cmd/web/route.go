@@ -12,11 +12,25 @@ var HeadersTmpl = []string{"./ui/html/tmpl/header.layout.tmpl",
 	"./ui/html/tmpl/changepassword.tmpl", "./ui/html/tmpl//modalinfo.tmpl", "./ui/html/tmpl/basicscripts.tmpl",
 	"./ui/html/tmpl/PreLoader.tmpl", "./ui/html/tmpl/toppanel.tmpl", "./ui/html/tmpl/pageheader.tmpl"}
 
+
+
 func routes(r *RouteData) *http.ServeMux {
 	mux := http.NewServeMux()
 	db := r.DBPool["admin"]
 	sakha_db := r.DBPool["sakha"]
 	SessionData := r.SessionData
+
+
+	var DefaultHtmlHandler = HtmlHandler{
+		DenyHandler:    DenyHandler,
+		SourceHtml:     "",
+		PathSourceHtml: HeadersTmpl,
+		HtmlData: HtmlObjects{
+			SessionData:     &SessionData,
+			AcceptedObjects: make(AccessMap),
+		},
+		Db: db,
+	}
 
 
 	fileServer := http.FileServer(NeuteredFileSystem{http.Dir("./ui/static/"), SessionData, db})
@@ -56,6 +70,10 @@ func routes(r *RouteData) *http.ServeMux {
 	mux.HandleFunc("/getcrossrrsdata", func(w http.ResponseWriter, r *http.Request) {
 		GetCrossRRSTableHandler(w, r, sakha_db)
 	})
+
+	mux.HandleFunc("/getshabdata", func(w http.ResponseWriter, r *http.Request) {
+		GetShabHandler(w, r, sakha_db)
+	})
 	//Обработчики для сохранения данных в БД
 	mux.HandleFunc("/edit/accept", func(w http.ResponseWriter, r *http.Request) {
 		EditAcceptHandler(w, r, db, &SessionData)
@@ -90,149 +108,97 @@ func routes(r *RouteData) *http.ServeMux {
 	})
 
 	//Обработчики вида "проверь права на html---сгенерируй страницу
-	//Для главной страницы
-	/*
-	   http.HandleFunc("/index", func(w http.ResponseWriter, r *http.Request) {
-	   	func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-	   		handler.HtmlHandle(w, r)
-	   	}(w, r, HtmlHandler{
-	   		DenyHandler:    DenyHandler,
-	   		SourceHtml:     "index.html",
-	   		PathSourceHtml: append([]string{"./ui/html/index.html"}, HeadersTmpl...),
-	   		HtmlData: HtmlObjects{
-	   			CommonObjects:   nil,
-	   			SessionData:     &SessionData,
-	   			AcceptedObjects: make(AccessMap),
-	   		},
-	   		Db: db,
-	   	})
-	   })
 
-	*/
 
 	//Для страницы редактирования нам надо получить информацию о спсообе входа.
 	//Ее возьмем непосредственно из строки запроса
+
 	mux.HandleFunc("/edit", func(w http.ResponseWriter, r *http.Request) {
-		func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-			handler.HtmlHandle(w, r)
-		}(w, r, HtmlHandler{
-			DenyHandler:    DenyHandler,
-			SourceHtml:     "edituser.html",
-			PathSourceHtml: append([]string{"./ui/html/edituser.html"}, HeadersTmpl...),
-			HtmlData: HtmlObjects{
-				CommonObjects:   Edithtml{r.URL.Query().Get("IsAdmin") == "true"},
-				SessionData:     &SessionData,
-				AcceptedObjects: make(AccessMap),
-			},
-			Db: db,
-		})
+		var ThisPageMeta *PageMeta
+		IsAdmin:= r.URL.Query().Get("IsAdmin")=="true"
+		if(IsAdmin){
+			ThisPageMeta=&PageMeta{"Редактирование пользователя","/edit?IsAdmin=true",
+				"Редактирование данных пользователя", "icofont icofont-edit bg-c-pink" }
+		}else{
+			ThisPageMeta=&PageMeta{"Профиль","/edit",
+				"Личные данные пользователя", "icofont icofont-edit bg-c-pink" }
+		}
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("edituser.html", "./ui/html/edituser.html" , *ThisPageMeta,
+		Edithtml{r.URL.Query().Get("IsAdmin") == "true"})
+		h.HtmlHandle(w,r)
 	})
 
+
 	//Для создания пользовтаелья дополнительно подгрузим дерево департаментов и список ролей из БД
+
 	mux.HandleFunc("/createuser", func(w http.ResponseWriter, r *http.Request) {
-		func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-			handler.HtmlHandle(w, r)
-		}(w, r, HtmlHandler{
-			DenyHandler:    DenyHandler,
-			SourceHtml:     "createuser.html",
-			PathSourceHtml: append([]string{"./ui/html/createuser.html"}, HeadersTmpl...),
-			HtmlData: HtmlObjects{
-				CommonObjects: Createhtml{
-					func(db *sql.DB) *DepTree {
-						tree, err := GetDepTree(db, -1)
-						if err != nil {
-							log.ErrLog.Println("Error loading departments tree")
-						}
-						return tree
-					}(db),
-					func(*sql.DB) []Role {
-						var RoleArr []Role
-						hc := http.Client{}
-						resp, _ := hc.Get("http://localhost:8182/getallroles")
-						x, _ := ioutil.ReadAll(resp.Body)
-						json.Unmarshal(x, &RoleArr)
-						return RoleArr
-					}(db)},
-				SessionData:     &SessionData,
-				AcceptedObjects: make(AccessMap),
-				PageMeta: PageMeta{PageHttp: "/createuser", PageName: "Create User", PageDescribe: "Include create user",
-					PageLogoClass: "icofont-edit bg-c-pink"},
-			},
-			Db: db,
-		})
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("createuser.html", "./ui/html/createuser.html" ,
+			PageMeta{PageHttp: "/createuser", PageName: "Создание пользователя", PageDescribe: "Создание нового пользователя",
+				PageLogoClass: "icofont-edit bg-c-pink"},
+			Createhtml{
+				func(db *sql.DB) *DepTree {
+					tree, err := GetDepTree(db, -1)
+					if err != nil {
+						log.ErrLog.Println("Error loading departments tree")
+					}
+					return tree
+				}(db),
+				func(*sql.DB) []Role {
+					var RoleArr []Role
+					hc := http.Client{}
+					resp, _ := hc.Get("http://localhost:8182/getallroles")
+					x, _ := ioutil.ReadAll(resp.Body)
+					json.Unmarshal(x, &RoleArr)
+					return RoleArr
+				}(db)})
+		h.HtmlHandle(w,r)
 	})
+
 
 	//Для создания пользовтаелья дополнительно подгрузим дерево департаментов и список ролей из БД
 	mux.HandleFunc("/yakuttest", func(w http.ResponseWriter, r *http.Request) {
-		func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-			handler.HtmlHandle(w, r)
-		}(w, r, HtmlHandler{
-			DenyHandler:    DenyHandler,
-			SourceHtml:     "yakuttest.html",
-			PathSourceHtml: append([]string{"./ui/html/yakuttest.html"}, HeadersTmpl...),
-			HtmlData: HtmlObjects{
-				CommonObjects:   nil,
-				SessionData:     &SessionData,
-				AcceptedObjects: make(AccessMap),
-				PageMeta: PageMeta{PageHttp: "/yakuttest", PageName: "Test rrs", PageDescribe: "Test table rrs",
-					PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"},
-			},
-			Db: db,
-		})
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("yakuttest.html", "./ui/html/yakuttest.html" ,
+			PageMeta{PageHttp: "/yakuttest", PageName: "Тест ррс",
+				PageDescribe: "Тестовая таблица. Параметры ррс и окр.среды",
+				PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"}, nil)
+		h.HtmlHandle(w,r)
 	})
 
 	mux.HandleFunc("/yakuttestro", func(w http.ResponseWriter, r *http.Request) {
-		func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-			handler.HtmlHandle(w, r)
-		}(w, r, HtmlHandler{
-			DenyHandler:    DenyHandler,
-			SourceHtml:     "yakuttestro.html",
-			PathSourceHtml: append([]string{"./ui/html/yakuttestro.html"}, HeadersTmpl...),
-			HtmlData: HtmlObjects{
-				CommonObjects:   nil,
-				SessionData:     &SessionData,
-				AcceptedObjects: make(AccessMap),
-				PageMeta: PageMeta{PageHttp: "/yakuttestro", PageName: "Test rho", PageDescribe: "Test table rho",
-					PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"},
-			},
-			Db: db,
-		})
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("yakuttestro.html", "./ui/html/yakuttestro.html" ,
+			PageMeta{PageHttp: "/yakuttestro", PageName: "Тест качество газа",
+				PageDescribe: "Tестовая таблица: Паспорт качества газа",
+				PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"}, nil)
+		h.HtmlHandle(w,r)
 	})
 
 	mux.HandleFunc("/yakuttestcross", func(w http.ResponseWriter, r *http.Request) {
-		func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-			handler.HtmlHandle(w, r)
-		}(w, r, HtmlHandler{
-			DenyHandler:    DenyHandler,
-			SourceHtml:     "yakuttestcross.html",
-			PathSourceHtml: append([]string{"./ui/html/yakuttestcross.html"}, HeadersTmpl...),
-			HtmlData: HtmlObjects{
-				CommonObjects:   nil,
-				SessionData:     &SessionData,
-				AcceptedObjects: make(AccessMap),
-				PageMeta: PageMeta{PageHttp: "/yakuttestcross", PageName: "Test cross", PageDescribe: "Test crosstable rrs",
-					PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"},
-			},
-			Db: db,
-		})
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("yakuttestcross.html", "./ui/html/yakuttestcross.html" ,
+			PageMeta{PageHttp: "/yakuttestcross", PageName: "Tест кросс-таблица",
+				PageDescribe: "Тестовая таблица ррс с выборкой параметра за промежуток",
+				PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"}, nil)
+		h.HtmlHandle(w,r)
 	})
 
 	mux.HandleFunc("/yakuttesttree", func(w http.ResponseWriter, r *http.Request) {
-		func(w http.ResponseWriter, r *http.Request, handler HtmlHandler) {
-			handler.HtmlHandle(w, r)
-		}(w, r, HtmlHandler{
-			DenyHandler:    DenyHandler,
-			SourceHtml:     "yakuttesttree.html",
-			PathSourceHtml: append([]string{"./ui/html/yakuttesttree.html"}, HeadersTmpl...),
-			HtmlData: HtmlObjects{
-				CommonObjects:   nil,
-				SessionData:     &SessionData,
-				AcceptedObjects: make(AccessMap),
-				PageMeta: PageMeta{PageHttp: "/yakuttestree", PageName: "Test tree", PageDescribe: "Test table tree",
-					PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"},
-			},
-			Db: db,
-		})
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("yakuttesttree.html", "./ui/html/yakuttesttree.html" ,
+			PageMeta{PageHttp: "/yakuttestree", PageName: "Тестовые деревья", PageDescribe: "Набор тестовых деревьев",
+				PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"}, nil)
+		h.HtmlHandle(w,r)
+	})
+
+	mux.HandleFunc("/yakuttestshab", func(w http.ResponseWriter, r *http.Request) {
+		h:= DefaultHtmlHandler
+		h.ConfigDefaultHandler("yakuttestshab.html", "./ui/html/yakuttestshab.html" ,
+			PageMeta{PageHttp: "/yakuttestshab", PageName: "Тестовый шаблон", PageDescribe: "Тестовый шаблон",
+				PageLogoClass: "icofont-animal-cat-alt-3 bg-c-orenge"}, nil)
+		h.HtmlHandle(w,r)
 	})
 
 	return mux

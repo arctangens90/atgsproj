@@ -26,6 +26,7 @@ func JsonFromSqlFuncHandler(w http.ResponseWriter, r *http.Request, db *sql.DB, 
 	}
 	_, err = w.Write(IArr)
 
+
 	if err != nil {
 		log.ErrLog.Printf("Error writing data, %s", err)
 	}
@@ -63,6 +64,9 @@ func GetCrossRRSTableHandler(w http.ResponseWriter, r *http.Request, db *sql.DB)
 		r.URL.Query().Get("date_end"))
 }
 
+func GetShabHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	JsonFromSqlFuncHandler(w, r, db, "select * from test_shab2()")
+}
 func GetRoTableHandler(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	JsonFromSqlFuncHandler(w, r, db, "select * from test_tok($1)", r.URL.Query().Get("val_time"))
 }
