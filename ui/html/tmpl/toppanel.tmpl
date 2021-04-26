@@ -29,30 +29,30 @@
                     <li class="user-profile header-notification">
                         {{if $isSigned}}
                         <a href="#">
-                            <span>Signed as {{.UserData.User.Login}}</span>
+                            <span>{{.UserData.User.Login}}</span>
                             <i class="ti-angle-down"></i>
                         </a>
                         <ul class="show-notification profile-notification">
                             <li>
                                 <a href="#">
-                                    <i class="ti-settings"></i> Settings
+                                    <i class="ti-settings"></i> Настройки
                                 </a>
                             </li>
                             <li>
                                 <a href="/edit">
-                                    <i class="ti-user"></i> Profile
+                                    <i class="ti-user"></i> Профиль
                                 </a>
                             </li>
                             <li>
                                 <a href="/logout">
-                                    <i class="ti-layout-sidebar-left"></i> Logout
+                                    <i class="ti-layout-sidebar-left"></i> Выйти
                                 </a>
                             </li>
                         </ul>
                     </li>
                     {{else}}
                         <a href="/auth">
-                            <span>Sign up</span>
+                            <span>Войти </span>
                             <i class="ti-angle-down"></i>
                         </a>
                     {{end}}
