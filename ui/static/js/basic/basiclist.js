@@ -13,10 +13,15 @@ function addOption (ilist, text, value, title=null , isDefaultSelected=false, is
 
 function addLiOption (ilist, liclass,  text, value, title){
     let li = document.createElement('li');
-    li.className = liclass;
+    li.className = "";
     li.setAttribute("data-value", value)
     li.title = title;
     li.appendChild(document.createTextNode(text));
+    li.onclick =()=>{
+        //complete автоматом ставит jquery, почему не знаю
+        li.className = li.className=="selected complete"? "": "selected"
+    }
+
     ilist.appendChild(li);
 }
 
@@ -71,7 +76,7 @@ async function fillUiListFromServer(ilist, optionObj, errfunc= ()=>{}, successfu
 //Тоже самое, но с выведением окна при ошибке
 async function fillListFromServerModal (ilist, optionObj, errtext){
     fillListFromServer(ilist, optionObj, (ans)=>{
-        setFailureInfoModal(errtext+": "+ans.err_message);
+        setFailureInfoModal(errtext);
         $('#modalinfo').modal('show')
     })
 }

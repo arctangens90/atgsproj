@@ -13,12 +13,12 @@ function setInfoModal(m){
 }
 
 function setSuccessInfoModal(bodyText) {
-    setInfoModal(new Modal("Success", bodyText, "OK"))
+    setInfoModal(new Modal("Успешно", bodyText, "OK"))
     document.getElementById("modalinfo-divheader").style.background='darkseagreen'
 }
 
 function setFailureInfoModal(bodyText) {
-    setInfoModal(new Modal("Error", bodyText, "OK"))
+    setInfoModal(new Modal("Ошибка", bodyText, "OK"))
    document.getElementById("modalinfo-divheader").style.background='red'
 
 }

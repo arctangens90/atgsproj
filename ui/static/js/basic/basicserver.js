@@ -21,7 +21,6 @@ async function postJSON2Server(url, f){
     try{
         return await response.json()
     }catch(err){
-        alert(err)
         return {"err_message":"bad response from server"}
     }
 }
@@ -39,5 +38,5 @@ function postJSON2ServerModalCallback(url, jsonGetter, successMess, errMess){
 
 
 function defaultDataSaver(url, jsonGetter){
-    postJSON2ServerModalCallback(url, jsonGetter, "Succesfuly saved", "Error in saving data")
+    postJSON2ServerModalCallback(url, jsonGetter, "Успешно сохранено", "Ошибка при сохранении данных")
 }
